@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="cs">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Pojmy z politologie | Kvíz</title>
+	<style>
+		:root { --ink:#f5f4fb; --muted:#aaa7ba; --paper:#202027; --line:#3b3a48; --violet:#8b6cff; --green:#6ee7b7; --coral:#ef4f9f; }
+		* { box-sizing:border-box; }
+		body { margin:0; color:var(--ink); background:#111116; font-family:Arial, Helvetica, sans-serif; }
+		.page { width:min(100% - 36px, 840px); margin:0 auto; padding:40px 0 64px; }
+		a { color:inherit; }
+		.back { display:inline-flex; margin-bottom:28px; color:#d9d1ff; font-weight:700; text-decoration:none; }
+		.back:hover { color:#fff; }
+		header, .question, .result { background:var(--paper); border:1px solid var(--line); border-radius:12px; box-shadow:0 10px 28px rgba(0,0,0,.2); }
+		header { padding:clamp(28px, 6vw, 48px); border-left:5px solid var(--violet); }
+		.eyebrow { margin:0 0 12px; color:#c7baff; font:700 12px Arial,sans-serif; letter-spacing:1.5px; text-transform:uppercase; }
+		h1 { margin:0; font-size:clamp(34px, 6vw, 56px); line-height:1; }
+		.intro { max-width:610px; margin:16px 0 0; color:var(--muted); font-size:17px; line-height:1.5; }
+		form { display:grid; gap:14px; margin-top:22px; }
+		.question { padding:22px; }
+		.question h2 { margin:0 0 16px; font-size:19px; line-height:1.35; }
+		.question h2::after { content:"1 bod"; display:block; margin-top:8px; color:var(--muted); font:700 12px Arial,sans-serif; letter-spacing:.3px; text-transform:uppercase; }
+		.options { display:grid; gap:9px; }
+		.option { display:flex; align-items:center; gap:10px; padding:11px 13px; background:#17171d; border:1px solid var(--line); border-radius:7px; cursor:pointer; }
+		.option:hover { border-color:var(--violet); }
+		input { accent-color:var(--violet); }
+		.actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:10px; }
+		button, .return { padding:14px 18px; border:0; border-radius:7px; cursor:pointer; font:700 14px Arial,sans-serif; }
+		button { color:#fff; background:var(--coral); box-shadow:0 4px 0 #b52e72; }
+		.return { color:#eae7f5; background:#292834; text-decoration:none; }
+		.result { display:none; margin-top:20px; padding:20px; border-color:rgba(110,231,183,.6); }
+		.result.visible { display:block; }
+		.result strong { color:var(--green); font-size:22px; }
+		@media (max-width:620px) { .page { width:min(100% - 20px, 840px); padding-top:20px; } header,.question { padding:18px 14px; } .question h2 { font-size:17px; } }
+	</style>
+</head>
+<body>
+	<main class="page">
+		<a class="back" href="index.html">← Zpět na pracovní list</a>
+		<header>
+			<p class="eyebrow">Politologie · navazující kvíz</p>
+			<h1>Vyzkoušej si pojmy</h1>
+			<p class="intro">Ověř si, jak se orientuješ v základních pojmech politologie. Po vyhodnocení se můžeš kdykoliv vrátit k pracovnímu listu.</p>
+		</header>
+		<form id="quizForm">
+			<section class="question"><h2>1. Program „Budeme podporovat malé podnikatele, ulevíme jim slevou na dani a občanům umožníme manželství bez rozdílu orientace“ odpovídá:</h2><div class="options"><label class="option"><input type="radio" name="q1" value="a"> Levicová autoritativní strana</label><label class="option"><input type="radio" name="q1" value="b"> Pravicová autoritativní strana</label><label class="option"><input type="radio" name="q1" value="c"> Levicová liberální strana</label><label class="option"><input type="radio" name="q1" value="d"> Pravicová liberální strana</label></div></section>
+			<section class="question"><h2>2. Který znak je typický pro demokracii?</h2><div class="options"><label class="option"><input type="radio" name="q2" value="a"> Jedna povolená politická strana</label><label class="option"><input type="radio" name="q2" value="b"> Svobodné volby</label><label class="option"><input type="radio" name="q2" value="c"> Cenzura médií</label><label class="option"><input type="radio" name="q2" value="d"> Vláda jedné osoby bez omezení</label></div></section>
+			<section class="question"><h2>3. Který stát je typickým příkladem totalitního režimu?</h2><div class="options"><label class="option"><input type="radio" name="q3" value="a"> Severní Korea</label><label class="option"><input type="radio" name="q3" value="b"> Jižní Korea</label><label class="option"><input type="radio" name="q3" value="c"> Německo</label><label class="option"><input type="radio" name="q3" value="d"> Francie</label></div></section>
+			<section class="question"><h2>4. Která ideologie klade důraz na svobodu jednotlivce a odpovědnost každého sám za sebe?</h2><div class="options"><label class="option"><input type="radio" name="q4" value="a"> Socialismus</label><label class="option"><input type="radio" name="q4" value="b"> Liberalismus</label><label class="option"><input type="radio" name="q4" value="c"> Konzervatismus</label><label class="option"><input type="radio" name="q4" value="d"> Komunismus</label></div></section>
+			<section class="question"><h2>5. Ve kterém státě si můžete koupit zbraň v supermarketu?</h2><div class="options"><label class="option"><input type="radio" name="q5" value="a"> Španělsko</label><label class="option"><input type="radio" name="q5" value="b"> Polsko</label><label class="option"><input type="radio" name="q5" value="c"> Nizozemsko</label><label class="option"><input type="radio" name="q5" value="d"> USA</label></div></section>
+			<section class="question"><h2>6. Urči ideologii na základě popisu: Společnost vyjadřuje odpor k potratům a má zdrženlivý postoj k právům LGBTQ+. V oblasti technologií je patrný opatrný přístup ke kryptoměnám a digitalizaci. Země odmítá přijímání uprchlíků z Afriky a obecně se staví proti legální imigraci.</h2><div class="options"><label class="option"><input type="radio" name="q6" value="a"> Socialismus</label><label class="option"><input type="radio" name="q6" value="b"> Liberalismus</label><label class="option"><input type="radio" name="q6" value="c"> Konzervatismus</label><label class="option"><input type="radio" name="q6" value="d"> Anarchismus</label></div></section>
+			<section class="question"><h2>7. Jak se nazývá spojenectví dvou nebo více politických stran, které se dohodnou na vytvoření společné vlády a disponují většinou v parlamentu?</h2><div class="options"><label class="option"><input type="radio" name="q7" value="a"> Menšinová vláda</label><label class="option"><input type="radio" name="q7" value="b"> Opoziční blok</label><label class="option"><input type="radio" name="q7" value="c"> Vládní koalice</label><label class="option"><input type="radio" name="q7" value="d"> Prezidentský systém</label></div></section>
+			<section class="question"><h2>8. Která z následujících politických ideologií je typicky považována za levicovou?</h2><div class="options"><label class="option"><input type="radio" name="q8" value="a"> Konzervatismus</label><label class="option"><input type="radio" name="q8" value="b"> Sociální demokracie</label><label class="option"><input type="radio" name="q8" value="c"> Liberalismus</label><label class="option"><input type="radio" name="q8" value="d"> Libertariánství</label></div></section>
+			<section class="question"><h2>9. Kde a kdy se poprvé objevilo rozdělení na politickou „pravici“ a „levici“?</h2><div class="options"><label class="option"><input type="radio" name="q9" value="a"> V průběhu průmyslové revoluce ve Velké Británii</label><label class="option"><input type="radio" name="q9" value="b"> Během Velké francouzské revoluce při zasedání Národního shromáždění</label><label class="option"><input type="radio" name="q9" value="c"> Při vzniku Spojených národů po druhé světové válce</label><label class="option"><input type="radio" name="q9" value="d"> Během americké revoluce v 18. století</label></div></section>
+			<section class="question"><h2>10. Co si představíte pod pojmem demokracie?</h2><div class="options"><label class="option"><input type="radio" name="q10" value="a"> Vláda jednoho člověka nebo úzké skupiny lidí, kteří rozhodují o všem.</label><label class="option"><input type="radio" name="q10" value="b"> Politický systém, kde moc vychází z občanů a rozhoduje většina.</label><label class="option"><input type="radio" name="q10" value="c"> Systém, kde o chodu státu rozhodují pouze náboženští představitelé.</label><label class="option"><input type="radio" name="q10" value="d"> Státní zřízení, ve kterém panovník získává moc dědičně.</label></div></section>
+			<div class="actions"><button type="submit">Vyhodnotit kvíz</button><a class="return" href="index.html">Zpět na pracovní list</a></div>
+		</form>
+		<section class="result" id="result" aria-live="polite"></section>
+	</main>
+	<script>
+		const correct = { q1: 'd', q2: 'b', q3: 'a', q4: 'b', q5: 'd', q6: 'c', q7: 'c', q8: 'b', q9: 'b', q10: 'b' };
+		document.getElementById('quizForm').addEventListener('submit', event => {
+			event.preventDefault();
+			const score = Object.entries(correct).filter(([name, answer]) => document.querySelector(`input[name="${name}"]:checked`)?.value === answer).length;
+			const result = document.getElementById('result');
+			result.classList.add('visible');
+			result.innerHTML = `<strong>Výsledek: ${score} / 10</strong><p>${score === 10 ? 'Skvěle, všechny odpovědi jsou správně.' : 'Dobrá práce. Zkus si ještě jednou projít pojmy a kvíz můžeš vyplnit znovu.'}</p>`;
+		});
+	</script>
+</body>
+</html>

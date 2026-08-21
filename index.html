@@ -1,0 +1,625 @@
+<!doctype html>
+<html lang="cs">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Politologie - úvod | Interaktivní pracovní list</title>
+	<style>
+		:root {
+			--ink: #f5f4fb;
+			--muted: #a7a5b5;
+			--paper: #202027;
+			--line: #3b3a48;
+			--teal: #8b6cff;
+			--teal-dark: #b5a5ff;
+			--yellow: #27c7b5;
+			--coral: #ef4f9f;
+			--green: #6ee7b7;
+			--red: #ff7a90;
+		}
+
+		* { box-sizing: border-box; }
+		.page { user-select: none; -webkit-user-select: none; }
+		input, textarea, select { user-select: text; -webkit-user-select: text; }
+		html {
+			scroll-behavior: smooth;
+		}
+		html {
+			scroll-behavior: smooth;
+		}
+		body {
+			margin: 0;
+			color: var(--ink);
+			background: #111116;
+			font-family: Arial, Helvetica, sans-serif;
+		}
+		body::before {
+			content: "";
+			position: fixed;
+			inset: 0;
+			pointer-events: none;
+			opacity: .18;
+			background-image: radial-gradient(#777487 .7px, transparent .7px);
+			background-size: 15px 15px;
+		}
+		.page { position: relative; max-width: 1040px; margin: 0 auto; padding: 28px 18px 64px; }
+		header {
+			position: relative;
+			overflow: hidden;
+			margin-bottom: 16px;
+			padding: clamp(28px, 6vw, 58px);
+			color: white;
+			background: #000;
+			border: 1px solid #3e3b51;
+			border-radius: 12px;
+			box-shadow: 0 18px 42px rgba(0, 0, 0, .28);
+		}
+		header::after {
+			display: none;
+		}
+		.eyebrow { margin: 0 0 16px; color: #c7baff; font: 700 12px/1.2 Arial, sans-serif; letter-spacing: 2px; text-transform: uppercase; }
+		h1 { max-width: 650px; margin: 0; font-size: clamp(34px, 7vw, 68px); line-height: .98; font-weight: 700; }
+		.intro { max-width: 610px; margin: 20px 0 0; color: #d8d5e4; font-size: 18px; line-height: 1.55; }
+		.toolbar { display: flex; align-items: center; justify-content: space-between; gap: 18px; margin: 22px 0; }
+		.progress-wrap { flex: 1; }
+		.progress-label { display: flex; justify-content: space-between; margin-bottom: 8px; color: var(--muted); font: 700 12px Arial, sans-serif; }
+		.progress { height: 9px; overflow: hidden; background: #373541; border-radius: 99px; }
+		.progress-bar { width: 0; height: 100%; background: linear-gradient(90deg, var(--teal), var(--coral)); border-radius: inherit; transition: width .3s ease; }
+		button { border: 0; cursor: pointer; font: 700 14px Arial, sans-serif; }
+		.reset { padding: 11px 16px; color: #e9e6f5; background: #292834; border: 1px solid #4a4758; border-radius: 6px; }
+		main { display: grid; gap: 16px; }
+		.question { position: relative; padding: 22px 28px; background: var(--paper); border: 1px solid #353440; border-left: 5px solid var(--teal); border-radius: 9px; box-shadow: 0 8px 22px rgba(0, 0, 0, .16); }
+		.question:nth-child(3n) { border-left-color: var(--teal); }
+		.question:nth-child(3n + 1) { border-left-color: var(--teal); }
+		.number { display: inline-grid; width: 30px; height: 30px; place-items: center; margin-right: 10px; color: white; background: var(--teal); border-radius: 8px; font: 700 14px Arial, sans-serif; vertical-align: middle; }
+		h2 { display: inline; margin: 0; font-size: 22px; line-height: 1.35; }
+		.hint { margin: 12px 0 18px 42px; color: var(--muted); font-style: italic; line-height: 1.45; }
+		.question .hint { display: none; }
+		.question > input.answer, .question > select.answer { display: block; margin-top: 18px; }
+		.question > .free-answer { margin-top: 20px; }
+		label, .option { font: 15px/1.45 Arial, sans-serif; }
+		input[type="text"], select { width: min(100%, 510px); padding: 12px 13px; color: var(--ink); background: #17171d; border: 2px solid var(--line); border-radius: 6px; font: 16px Arial, sans-serif; }
+		input[type="text"]:focus, select:focus { outline: 3px solid rgba(139, 108, 255, .25); border-color: var(--teal); }
+		.blank { display: inline-block !important; width: 170px !important; margin: 0 5px; padding: 4px 7px !important; border-width: 0 0 2px !important; border-radius: 0 !important; }
+		.options { display: grid; gap: 10px; max-width: 650px; }
+		.option { display: flex; align-items: center; gap: 10px; padding: 11px 14px; background: #292832; border: 1px solid var(--line); border-radius: 6px; cursor: pointer; }
+		.option:hover { border-color: var(--teal); }
+		input[type="radio"] { accent-color: var(--teal); }
+		.feedback { min-height: 0; margin: 12px 0 0; font: 700 14px Arial, sans-serif; }
+		.question.is-submitted { padding-top: 54px; background: linear-gradient(135deg, #1d302c, var(--paper)); border-color: rgba(110, 231, 183, .72); border-left-color: var(--green); box-shadow: 0 8px 24px rgba(30, 158, 112, .16); }
+		.question.is-submitted::after { content: "Odesláno"; position: absolute; top: 14px; right: 16px; padding: 5px 9px; color: #09251b; background: var(--green); border-radius: 999px; font: 700 11px Arial, sans-serif; letter-spacing: .3px; text-transform: uppercase; }
+		.locked-feedback { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; color: var(--green); }
+		.edit-answer { padding: 7px 10px; color: #d8d5e4; background: #292832; border: 1px solid #6a5cc0; border-radius: 6px; font: 700 12px Arial, sans-serif; }
+		.edit-answer:hover { color: #fff; border-color: var(--teal); }
+		.correct { color: var(--green); }
+		.incorrect { color: var(--red); }
+		.answer-reveal { margin-top: 5px; color: var(--muted); font: 13px Arial, sans-serif; }
+		.actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+		.check, .reset { padding: 15px 24px; color: white; background: var(--coral); border-radius: 7px; box-shadow: 0 5px 0 #b52e72; }
+		.reset { background: #2b2d38; box-shadow: 0 5px 0 #1d1f2a; }
+		.check:active { transform: translateY(3px); box-shadow: 0 2px 0 #b52e72; }
+		.check:disabled { color: #fff; background: #7357e8; box-shadow: 0 5px 0 #4d38ae; cursor: default; }
+		.terms-quiz-link { display: none; align-items: center; padding: 15px 24px; color: #fff; background: linear-gradient(100deg, #7357e8, #d94f9a); border-radius: 7px; box-shadow: 0 5px 0 #a93676; font: 700 14px Arial, sans-serif; text-decoration: none; }
+		.terms-quiz-link.visible { display: inline-flex; animation: terms-quiz-arrive .45s ease-out both, terms-quiz-pulse 1.8s .5s ease-in-out infinite; }
+		@keyframes terms-quiz-arrive { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+		@keyframes terms-quiz-pulse { 0%, 100% { opacity: 1; box-shadow: 0 5px 0 #a93676, 0 0 0 0 rgba(217, 79, 154, .4); } 50% { opacity: .9; box-shadow: 0 5px 0 #a93676, 0 0 0 10px rgba(217, 79, 154, 0); } }
+		@media (prefers-reduced-motion: reduce) { .terms-quiz-link.visible { animation: none; } }
+		.result { display: none; align-items: center; gap: 14px; padding: 17px 20px; color: #e9e6f5; background: #292844; border: 1px solid #514b79; border-radius: 7px; font: 700 16px Arial, sans-serif; }
+		.result.visible { display: flex; }
+		.score { color: var(--coral); font-size: 30px; }
+		.source { position: relative; z-index: 1; max-width: 100%; margin: 18px 0 0; color: #e1f0ec; font: italic 14px/1.5 Arial, sans-serif; }
+		.section-title { margin: 28px 0 8px; color: #d6ccff; font-size: 28px; }
+		.section-title.collapsible { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 14px 18px; cursor: pointer; background: #202027; border: 1px solid #353440; border-radius: 8px; user-select: none; }
+		.section-title.collapsible::after { content: ""; display: block; width: 9px; height: 9px; flex: 0 0 9px; margin-right: 4px; border-right: 2px solid #c7baff; border-bottom: 2px solid #c7baff; transform: rotate(225deg); transition: transform .28s ease, border-color .2s ease; }
+		.section-title.collapsible[aria-expanded="false"]::after { transform: rotate(45deg); }
+		.section-title.collapsible:hover::after { border-color: white; }
+		.section-content { display: grid; gap: 16px; max-height: 3000px; overflow: hidden; opacity: 1; transform: translateY(0); transition: max-height .42s ease, opacity .25s ease, transform .42s ease, margin .42s ease; }
+		.section-content.collapsed { max-height: 0; margin: -20px 0; opacity: 0; transform: translateY(-8px); }
+		.section-content.collapsed + .section-title.collapsible { margin-top: -12px; }
+		.section-title.collapsible:focus-visible { outline: 3px solid rgba(139, 108, 255, .35); outline-offset: 3px; }
+		.data-card { padding: 24px 28px; background: var(--paper); border: 1px solid #353440; border-radius: 9px; box-shadow: 0 8px 22px rgba(0, 0, 0, .16); }
+		.data-card h2 { display: block; margin-bottom: 16px; }
+		.reflection-title { display: flex !important; align-items: center; gap: 10px; width: 100%; margin: 0 0 18px !important; padding: 10px 15px; color: #fff !important; background: linear-gradient(100deg, #7357e8, #d94f9a); border-radius: 8px; box-shadow: 0 5px 14px rgba(112, 76, 204, .24); font-size: 18px !important; letter-spacing: .3px; }
+		.reflection-title::before { content: "✦"; display: grid; width: 25px; height: 25px; place-items: center; color: #241d3f; background: #f6d56d; border-radius: 50%; font-size: 15px; }
+		.secondary-chart { border-top: 5px solid var(--line); }
+		.secondary-chart .chart-note, .secondary-chart .education-legend { display: none; }
+		.chart-note { margin: 0 0 14px; color: var(--muted); font: 13px/1.4 Arial, sans-serif; }
+		.turnout-chart { display: grid; grid-template-columns: 82px 1fr; align-items: center; gap: 5px 10px; max-width: 760px; padding: 6px 0; font: 13px Arial, sans-serif; }
+		.turnout-chart h3 { grid-column: 1 / -1; margin: 15px 0 2px; color: var(--teal-dark); font-size: 17px; }
+		.turnout-legend { grid-column: 1 / -1; display: flex; justify-content: center; gap: 20px; margin-bottom: 8px; }
+		.yes-key::before, .no-key::before { content: ""; display: inline-block; width: 13px; height: 13px; margin-right: 6px; border-radius: 50%; vertical-align: -2px; }
+		.yes-key::before { background: #3d8bfd; }.no-key::before { background: #d94f68; }
+		.turnout-row { display: flex; height: 30px; overflow: hidden; background: #d94f68; }
+		.turnout-row span { display: flex; align-items: center; padding: 0 7px; }
+		.turnout-row .yes { color: white; background: #3d8bfd; }.turnout-row .no { color: white; }
+		.source-note { margin: 14px 0 0; color: var(--muted); font: italic 12px/1.45 Arial, sans-serif; }
+		a[href="#graf-k-zamysleni"] {
+			padding: 0 2px;
+			color: #c7baff;
+			border-bottom: 2px solid currentColor;
+			font: inherit;
+			text-decoration: none;
+			transition: color .2s ease;
+		}
+		a[href="#graf-k-zamysleni"]:hover {
+			color: #fff;
+		}
+				.party-chart { display: grid; grid-template-columns: repeat(3, minmax(55px, 1fr)); align-items: start; gap: 0 8px; height: 300px; padding: 12px 8px 0; border-bottom: 2px solid #9ba5a4; }
+				.party { display: flex; height: 138px; flex-direction: column; align-items: center; justify-content: end; gap: 5px; color: var(--muted); font: 11px Arial, sans-serif; text-align: center; }
+				.party:nth-child(n + 4) { transform: translateY(-8px); }
+				.bars { display: flex; height: 105px; align-items: end; gap: 2px; }
+				.bar { width: 12px; min-height: 3px; background: var(--teal); border-radius: 3px 3px 0 0; }
+				.bar.maturity { background: #3567c8; }.bar.degree { background: #211f66; }.bar.school { background: #e95b9f; }
+		.bar-value { color: var(--teal-dark); font: 700 11px Arial, sans-serif; }
+		.age-chart { display: grid; gap: 7px; margin-top: 20px; font: 11px Arial, sans-serif; }
+		.age-row { display: grid; grid-template-columns: 65px 1fr; align-items: center; gap: 8px; }
+		.stack { display: flex; height: 25px; overflow: hidden; border-radius: 2px; }
+		.stack span { display: grid; min-width: 20px; place-items: center; color: white; font-size: 11px; }
+		.a1 { background: #3567c8; }.a2 { background: #211f66; }.a3 { background: #e95b9f; }.a4 { background: #bd4c0e; }.a5 { background: #1e1e1e; }.a6 { background: #ed1919; }.a7 { background: #11afd2; }.a8 { background: #999; }
+		.legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 7px 14px; margin-top: 12px; color: var(--muted); font: 11px Arial, sans-serif; }
+		.legend span::before { content: ""; display: inline-block; width: 9px; height: 9px; margin-right: 4px; background: var(--legend-color); }
+		.education-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 7px 14px; margin: 12px 0 4px; color: #d8d5e4; font: 12px Arial, sans-serif; }
+		.education-legend span::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 5px; background: var(--legend-color); border-radius: 2px; vertical-align: -1px; }
+		.preference-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 18px; margin-top: 14px; }
+		.preference-group { padding: 12px 12px 16px; background: #17171d; border: 1px solid #353440; border-radius: 7px; }
+		.preference-group h3 { margin: 0 0 15px; color: #f5f4fb; font: 700 15px Arial, sans-serif; }
+		.preference-row { display: grid; grid-template-columns: 108px 1fr 30px; align-items: center; gap: 7px; margin: 7px 0; color: #d8d5e4; font: 11px Arial, sans-serif; }
+		.preference-track { height: 13px; overflow: hidden; background: #30303b; border: 1px solid #464456; border-radius: 99px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, .25); }
+		.preference-fill { display: block; min-width: 3px; height: 100%; border-radius: inherit; }
+		.preference-fill.maturity { background: #3567c8; }.preference-fill.degree { background: #211f66; }.preference-fill.school { background: #e95b9f; }
+		.preference-value { color: #fff; font-weight: 700; text-align: right; }
+		.free-answer { display: block; width: 100% !important; max-width: 760px !important; min-height: 112px; margin-top: 16px; resize: vertical; padding: 15px 17px; color: var(--ink); background: #17171d; border: 2px solid #494657; border-radius: 7px; box-shadow: inset 0 2px 5px rgba(0, 0, 0, .16); font: 16px/1.55 Arial, sans-serif; transition: border-color .2s ease, box-shadow .2s ease, background .2s ease; }
+		.free-answer:hover { border-color: #6a5cc0; background: #1b1a23; }
+		.free-answer:focus { outline: none; border-color: var(--teal); background: #1b1a23; box-shadow: 0 0 0 4px rgba(139, 108, 255, .14), inset 0 2px 5px rgba(0, 0, 0, .16); }
+		.free-answer::placeholder { color: #858291; font-style: italic; }
+		.rank-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; max-width: 760px; }
+		.rank-grid label { display: grid; gap: 6px; color: var(--muted); font-size: 12px; }
+		.rank-grid select { width: 100%; }
+		.rank-board { display: grid; gap: 9px; max-width: 760px; margin-top: 18px; }
+		.rank-instruction { margin: 0 0 10px; color: var(--muted); font: 13px/1.45 Arial, sans-serif; }
+		.rank-list { display: grid; gap: 9px; }
+		.rank-row { display: flex; flex-direction: row; align-items: center; gap: 10px; min-height: 52px; }
+		.rank-order { display: flex; align-items: center; justify-content: center; flex: 0 0 54px; width: 54px; min-height: 52px; height: 52px; padding: 11px 8px; color: #1b1a22; background: #bdb5f3; border-radius: 7px; font: 700 15px Arial, sans-serif; box-shadow: 0 3px 0 rgba(0, 0, 0, .18); }
+		.rank-card { display: flex; align-items: center; justify-content: center; flex: 1 1 0; min-height: 52px; height: 52px; padding: 11px 14px; color: #fff; background: #302d49; border: 1px solid #5c5492; border-radius: 7px; cursor: grab; font: 700 15px Arial, sans-serif; box-shadow: 0 3px 0 rgba(0, 0, 0, .18); user-select: none; touch-action: none; }
+		.rank-card:nth-child(2) { background: #303d4c; border-color: #4e7895; }.rank-card:nth-child(3) { background: #422e4b; border-color: #86508e; }.rank-card:nth-child(4) { background: #254443; border-color: #3f8b83; }
+		.rank-card:active { cursor: grabbing; }.rank-card.dragging { opacity: .4; }
+		.rank-label { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; text-align: center; }
+		.rank-card::before { content: "⠿"; color: #bdb5f3; font-size: 22px; line-height: 1; margin-right: 12px; }
+		.diagram { position: relative; display: grid; width: min(100%, 520px); aspect-ratio: 1; margin: 12px auto 20px; place-items: center; overflow: hidden; background: #000; }
+		.petal { position: absolute; width: 57%; height: 48%; background: #f4b18c; border-radius: 52% 48% 52% 48%; }
+		.petal.one { top: 1%; left: 1%; transform: rotate(35deg); }.petal.two { top: 1%; right: 1%; transform: rotate(145deg); }.petal.three { bottom: 1%; left: 1%; transform: rotate(-35deg); }.petal.four { right: 1%; bottom: 1%; transform: rotate(-145deg); }
+		.diagram span { position: absolute; z-index: 2; width: 40%; color: #111; font: 700 17px/1.18 Arial, sans-serif; text-align: center; }
+		.diagram > span:nth-of-type(1) { top: 13% !important; left: 5% !important; }
+		.diagram > span:nth-of-type(2) { top: 13% !important; right: 5% !important; }
+		.diagram > span:nth-of-type(3) { bottom: 13% !important; left: 5% !important; }
+		.diagram > span:nth-of-type(4) { right: 5% !important; bottom: 13% !important; }
+		.diagram .center { width: auto; padding: 30px 27px; background: #ee773b; border-radius: 50%; font-size: 25px; }
+		.citizen-diagram { display: block; width: min(100%, 360px); height: auto; margin: 20px 0; }
+		.header-diagram { display: block; width: min(100%, 240px); height: auto; margin: 8px auto 16px; }
+		.intro-diagram { display: block; width: 100%; height: auto; margin: 16px 0 0; }
+		footer { margin-top: 28px; color: #858291; text-align: center; font: 12px Arial, sans-serif; }
+		.intro-screen { position: fixed; z-index: 20; inset: 0; display: grid; place-items: center; padding: 18px; background: #09090d; transition: opacity .45s ease, visibility .45s ease; }
+		.intro-screen.is-hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+		.intro-card { position: relative; overflow: hidden; width: min(100%, 1004px); margin: 0; padding: clamp(28px, 6vw, 58px); color: white; background: #000; border: 1px solid #3e3b51; border-radius: 12px; box-shadow: 0 18px 42px rgba(0, 0, 0, .28); }
+		.intro-card .eyebrow { color: #c7baff; }.intro-card h1 { max-width: 650px; margin: 0; font-size: clamp(34px, 7vw, 68px); line-height: .98; }.intro-card .intro { max-width: 610px; margin: 20px 0 0; color: #d8d5e4; font-size: 18px; line-height: 1.55; }.intro-card .source { position: relative; z-index: 1; max-width: 100%; }
+		.start-button { display: block; margin: 28px 0 0; padding: 14px 20px; color: white; background: linear-gradient(100deg, #7357e8, #d94f9a); border: 0; border-radius: 7px; font: 700 15px Arial, sans-serif; opacity: 0; transform: translateY(8px); transition: opacity .35s ease, transform .35s ease; }
+		.start-button.is-ready { opacity: 1; transform: translateY(0); cursor: pointer; }
+		.anti-cheat-dialog { width: min(calc(100% - 36px), 480px); padding: 0; color: var(--ink); background: #202027; border: 1px solid #5c5492; border-radius: 16px; box-shadow: 0 28px 80px rgba(0, 0, 0, .62); }
+		.anti-cheat-dialog::backdrop { background: rgba(7, 7, 12, .82); backdrop-filter: blur(6px); }
+		.anti-cheat-content { padding: 30px; border-top: 5px solid #ffb84b; border-radius: inherit; }
+		.anti-cheat-icon { display: grid; width: 48px; height: 48px; place-items: center; margin-bottom: 18px; color: #211b0d; background: #ffca65; border-radius: 50%; font: 900 25px Arial, sans-serif; }
+		.anti-cheat-dialog h2 { display: block; margin: 0 0 10px; color: #fff; font-size: 25px; }
+		.anti-cheat-dialog p { margin: 0; color: #d8d5e4; font: 16px/1.55 Arial, sans-serif; }
+		.anti-cheat-dismiss { width: 100%; margin-top: 24px; padding: 14px 18px; color: #20172f; background: #ffca65; border-radius: 8px; box-shadow: 0 4px 0 #bd8330; font: 700 15px Arial, sans-serif; }
+		.anti-cheat-dismiss:active { transform: translateY(2px); box-shadow: 0 2px 0 #bd8330; }
+		@media (max-width: 620px) {
+			.page { width: 100%; padding: 10px 8px 34px; }
+			header { padding: 26px 18px 24px; }
+			.intro-card { padding: 26px 18px 24px; }
+			h1 { max-width: 100%; font-size: 38px; line-height: 1.02; }
+			.intro, .intro-card .intro { max-width: 100%; margin-top: 14px; font-size: 14px; line-height: 1.4; }
+			.intro-card h1 { max-width: 100%; font-size: 30px; line-height: 1.05; white-space: nowrap; }
+			.intro-card .source { font-size: 10px; line-height: 1.35; }
+			.toolbar { align-items: flex-end; flex-direction: column; }
+			.progress-wrap { width: 100%; }
+			.reset { width: 100%; }
+			.question { padding: 18px 14px; }
+			.data-card { min-width: 0; padding: 18px 14px; }
+			.data-card h2 { font-size: 20px; }
+			.preference-list { grid-template-columns: 1fr; gap: 10px; }
+			.preference-group { padding: 11px 10px 15px; }
+			.preference-row { grid-template-columns: 96px 1fr 32px; gap: 5px; font-size: 10px; }
+			.party-chart { grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 2px; }
+			.party-chart { grid-template-columns: repeat(3, minmax(0, 1fr)); height: 300px; align-items: start; gap: 0 6px; padding: 10px 0 0; }
+			.party { height: 138px; justify-content: end; font-size: 10px; }
+			.bars { height: 105px; }
+			.bar { width: 8px; }
+			.party b { min-height: 24px; }
+			h2 { font-size: 17px; line-height: 1.3; }
+			.number { width: 28px; height: 28px; margin-right: 7px; border-radius: 7px; }
+			.question > input.answer, .question > select.answer { width: 100%; margin-top: 16px; }
+			.free-answer { min-height: 100px; margin-top: 16px; padding: 13px 14px; }
+			.hint { margin-left: 0; }
+			.blank { width: 130px !important; }
+			header::after { width: 150px; height: 150px; right: 12px; bottom: 12px; opacity: .22; }
+			.source { max-width: 100%; padding-right: 0; }
+			.citizen-diagram { width: min(100%, 280px); margin: 16px 0; }
+			.intro-diagram { width: 100%; margin-top: 14px; }
+			.section-title.collapsible { margin-top: 18px; padding: 12px 14px; font-size: 18px; white-space: nowrap; }
+			.section-content { gap: 12px; }
+			.rank-card { min-height: 50px; padding: 10px 11px; font-size: 14px; }
+			.turnout-chart { grid-template-columns: 62px 1fr; gap: 5px 7px; font-size: 12px; }
+			.turnout-row { height: 28px; }
+			.age-row { grid-template-columns: 50px 1fr; gap: 5px; }
+			.stack span { min-width: 0; padding: 0 2px; font-size: 9px; }
+			.legend { gap: 6px 9px; font-size: 10px; }
+		}
+		@media print {
+			body { background: white; }
+			body::before, .toolbar, .actions, .feedback, .answer-reveal, footer { display: none; }
+			.page { max-width: none; padding: 0; }
+			header { color: black; background: white; box-shadow: none; border-bottom: 3px solid var(--teal); }
+			header::after { display: none; }
+			.intro { color: black; }
+			.question { break-inside: avoid; box-shadow: none; }
+		}
+	</style>
+</head>
+<body>
+	<div class="intro-screen" id="introScreen" role="dialog" aria-modal="true" aria-labelledby="introTitle">
+		<div class="intro-card">
+			<p class="eyebrow">Pracovní list · Politologie</p>
+			<h1 id="introTitle">Politologie - úvod</h1>
+			<p class="intro">Čti data, porovnávej volby a přemýšlej, co znamená být odpovědným občanem.</p>
+			<p class="source">Zdroj: společná povolební studie STEM, NMS, IPSOS, MEDIAN, KANTAR a Data Collect, říjen 2025, N = 7738, CAWI + CATI</p>
+			<img class="intro-diagram" src="Obrázek1-transparent.png" alt="Diagram odpovědného občana">
+			<button class="start-button" id="startButton" type="button" disabled>Chápu, začínáme</button>
+		</div>
+	</div>
+	<dialog class="anti-cheat-dialog" id="antiCheatDialog" aria-labelledby="antiCheatTitle" aria-describedby="antiCheatMessage">
+		<div class="anti-cheat-content">
+			<div class="anti-cheat-icon" aria-hidden="true">!</div>
+			<h2 id="antiCheatTitle">Upozornění anticheatu</h2>
+			<p id="antiCheatMessage"></p>
+			<button class="anti-cheat-dismiss" id="antiCheatDismiss" type="button">Rozumím</button>
+		</div>
+	</dialog>
+	<div class="page">
+		<header>
+			<p class="eyebrow">Pracovní list · Politologie</p>
+			<h1>Politologie - úvod</h1>
+			<p class="intro">Čti data, porovnávej volby a přemýšlej, co znamená být odpovědným občanem.</p>
+			<p class="source">Zdroj: společná povolební studie STEM, NMS, IPSOS, MEDIAN, KANTAR a Data Collect, říjen 2025, N = 7738, CAWI + CATI</p>
+		</header>
+
+		<main>
+			<section class="data-card">
+				<h2>Hlavní graf: účast ve volbách</h2>
+				<p class="chart-note">Účastnil(a) jste se voleb do Poslanecké sněmovny? Hodnoty jsou uvedeny v procentech.</p>
+				<div class="turnout-chart" aria-label="Graf účasti ve volbách podle pohlaví a věku">
+					<div class="turnout-legend"><span class="yes-key">Ano</span><span class="no-key">Ne</span></div>
+					<strong>Celkově</strong><div class="turnout-row"><span class="yes" style="width:69%">69</span><span class="no" style="width:31%">31</span></div>
+					<h3>Pohlaví:</h3>
+					<strong>Muži</strong><div class="turnout-row"><span class="yes" style="width:72%">72</span><span class="no" style="width:28%">28</span></div>
+					<strong>Ženy</strong><div class="turnout-row"><span class="yes" style="width:66%">66</span><span class="no" style="width:34%">34</span></div>
+					<h3>Věk:</h3>
+					<strong>18-24 let</strong><div class="turnout-row"><span class="yes" style="width:68%">68</span><span class="no" style="width:32%">32</span></div>
+					<strong>25-34 let</strong><div class="turnout-row"><span class="yes" style="width:63%">63</span><span class="no" style="width:37%">37</span></div>
+					<strong>35-44 let</strong><div class="turnout-row"><span class="yes" style="width:65%">65</span><span class="no" style="width:35%">35</span></div>
+					<strong>45-54 let</strong><div class="turnout-row"><span class="yes" style="width:67%">67</span><span class="no" style="width:33%">33</span></div>
+					<strong>55-64 let</strong><div class="turnout-row"><span class="yes" style="width:70%">70</span><span class="no" style="width:30%">30</span></div>
+					<strong>65-74 let</strong><div class="turnout-row"><span class="yes" style="width:77%">77</span><span class="no" style="width:23%">23</span></div>
+					<strong>75 let +</strong><div class="turnout-row"><span class="yes" style="width:76%">76</span><span class="no" style="width:24%">24</span></div>
+				</div>
+				<p class="source-note">Zdroj: společná povolební studie STEM, NMS, IPSOS, MEDIAN, KANTAR a Data Collect, říjen 2025, N = 7738, CAWI + CATI</p>
+			</section>
+
+			<section class="data-card secondary-chart" id="graf-k-zamysleni">
+				<h2 class="reflection-title">K ZAMYŠLENÍ</h2>
+				<p class="chart-note">Volební preference podle dosaženého vzdělání a věkových skupin (v %). Horní část porovnává vzdělání, spodní část porovnává věk.</p>
+				<div class="education-legend"><span style="--legend-color:#3567c8">Modrá = bez maturity</span><span style="--legend-color:#211f66">Tmavě modrá = s maturitou</span><span style="--legend-color:#e95b9f">Růžová = vysoká škola</span></div>
+				<div class="preference-list" aria-label="Volební preference podle dosaženého vzdělání">
+					<div class="preference-group"><h3>ANO</h3><div class="preference-row"><span>Bez maturity</span><span class="preference-track"><span class="preference-fill maturity" style="width:45%"></span></span><span class="preference-value">45 %</span></div><div class="preference-row"><span>S maturitou</span><span class="preference-track"><span class="preference-fill degree" style="width:31%"></span></span><span class="preference-value">31 %</span></div><div class="preference-row"><span>Vysoká škola</span><span class="preference-track"><span class="preference-fill school" style="width:19%"></span></span><span class="preference-value">19 %</span></div></div>
+					<div class="preference-group"><h3>SPOLU</h3><div class="preference-row"><span>Bez maturity</span><span class="preference-track"><span class="preference-fill maturity" style="width:9%"></span></span><span class="preference-value">9 %</span></div><div class="preference-row"><span>S maturitou</span><span class="preference-track"><span class="preference-fill degree" style="width:21%"></span></span><span class="preference-value">21 %</span></div><div class="preference-row"><span>Vysoká škola</span><span class="preference-track"><span class="preference-fill school" style="width:31%"></span></span><span class="preference-value">31 %</span></div></div>
+					<div class="preference-group"><h3>STAN</h3><div class="preference-row"><span>Bez maturity</span><span class="preference-track"><span class="preference-fill maturity" style="width:6%"></span></span><span class="preference-value">6 %</span></div><div class="preference-row"><span>S maturitou</span><span class="preference-track"><span class="preference-fill degree" style="width:12%"></span></span><span class="preference-value">12 %</span></div><div class="preference-row"><span>Vysoká škola</span><span class="preference-track"><span class="preference-fill school" style="width:18%"></span></span><span class="preference-value">18 %</span></div></div>
+					<div class="preference-group"><h3>SPD</h3><div class="preference-row"><span>Bez maturity</span><span class="preference-track"><span class="preference-fill maturity" style="width:13%"></span></span><span class="preference-value">13 %</span></div><div class="preference-row"><span>S maturitou</span><span class="preference-track"><span class="preference-fill degree" style="width:6%"></span></span><span class="preference-value">6 %</span></div><div class="preference-row"><span>Vysoká škola</span><span class="preference-track"><span class="preference-fill school" style="width:3%"></span></span><span class="preference-value">3 %</span></div></div>
+					<div class="preference-group"><h3>Piráti</h3><div class="preference-row"><span>Bez maturity</span><span class="preference-track"><span class="preference-fill maturity" style="width:4%"></span></span><span class="preference-value">4 %</span></div><div class="preference-row"><span>S maturitou</span><span class="preference-track"><span class="preference-fill degree" style="width:7%"></span></span><span class="preference-value">7 %</span></div><div class="preference-row"><span>Vysoká škola</span><span class="preference-track"><span class="preference-fill school" style="width:10%"></span></span><span class="preference-value">10 %</span></div></div>
+					<div class="preference-group"><h3>Motoristé</h3><div class="preference-row"><span>Bez maturity</span><span class="preference-track"><span class="preference-fill maturity" style="width:5%"></span></span><span class="preference-value">5 %</span></div><div class="preference-row"><span>S maturitou</span><span class="preference-track"><span class="preference-fill degree" style="width:6%"></span></span><span class="preference-value">6 %</span></div><div class="preference-row"><span>Vysoká škola</span><span class="preference-track"><span class="preference-fill school" style="width:3%"></span></span><span class="preference-value">3 %</span></div></div>
+				</div>
+			</section>
+
+			<h2 class="section-title">Úkol 1: Základní otázky</h2>
+			<section class="question" data-kind="open"><span class="number">1</span><h2>Kolik procent respondentů se celkem voleb zúčastnilo?</h2><p class="hint">Opiš hodnotu z řádku „Celkově“ v hlavním grafu.</p><input class="answer" type="text" placeholder="Odpověď v %"><div class="feedback" aria-live="polite"></div></section>
+			<section class="question" data-kind="open"><span class="number">2</span><h2>Kolik respondentů se celkem zapojilo do tohoto výzkumu?</h2><p class="hint">Hledej údaj pod zkratkou „N“.</p><input class="answer" type="text" placeholder="Hledej údaj pod zkratkou „N“"><div class="feedback" aria-live="polite"></div></section>
+			<section class="question" data-kind="open"><span class="number">3</span><h2>Která věková skupina měla nejvyšší podíl odpovědí „Ne“?</h2><p class="hint">Porovnej červené části věkových řádků.</p><input class="answer" type="text" placeholder="Věková skupina"><div class="feedback" aria-live="polite"></div></section>
+			<section class="question" data-kind="open"><span class="number">4</span><h2>Bylo v roce 2025 u voleb více mužů nebo žen?</h2><p class="hint">Porovnej hodnoty „Ano“ u mužů a žen.</p><input class="answer" type="text" placeholder="Muži / ženy"><div class="feedback" aria-live="polite"></div></section>
+
+			<h2 class="section-title">Úkol 2: Porovnávání</h2>
+			<section class="question" data-kind="open"><span class="number">5</span><h2>Když se podíváš na věkové kategorie od 25 let výše, jak se účast mění s rostoucím věkem?</h2><textarea class="answer free-answer" placeholder="Popiš vlastními slovy, jak se hodnoty mění"></textarea><div class="feedback" aria-live="polite"></div></section>
+			<section class="question" data-kind="open"><span class="number">6</span><h2>Které věkové skupiny měly nadprůměrný podíl odpovědí „Ano“ ve srovnání s celkovým výsledkem 69 %?</h2><textarea class="answer free-answer" placeholder="Porovnej hodnoty s celkem"></textarea><div class="feedback" aria-live="polite"></div></section>
+			<section class="question" data-kind="open"><span class="number">7</span><h2>Představ si hypotetický scénář, ve kterém by měl v ČR každý občan vysokou školu. Které dvě politické strany by v této situaci podle <a href="#graf-k-zamysleni">grafu volebních preferencí</a> získaly nejvíce hlasů?</h2><textarea class="answer free-answer" placeholder="Napiš dvě strany"></textarea><div class="feedback" aria-live="polite"></div></section>
+
+			<h2 class="section-title">Úkol 3: Kritické myšlení</h2>
+			<section class="question" data-kind="open"><span class="number">8</span><h2>Proč si myslíš, že mladí lidé mají obecně nižší zájem o politiku nebo k volbám chodí méně než senioři? Uveď alespoň dva důvody.</h2><textarea class="answer free-answer" placeholder="Napiš alespoň dva důvody"></textarea><div class="feedback" aria-live="polite"></div></section>
+			<section class="question" data-kind="open"><span class="number">9</span><h2>Co podle tebe motivuje starší generaci k tomu, aby se voleb účastnila v tak hojném počtu?</h2><textarea class="answer free-answer" placeholder="Napiš vlastní názor"></textarea><div class="feedback" aria-live="polite"></div></section>
+			<section class="question" data-kind="open"><span class="number">10</span><h2>Muži odpověděli „Ano“ v 72 % případů, zatímco ženy v 66 %. Jaké společenské nebo historické faktory by mohly tento rozdíl vysvětlovat?</h2><textarea class="answer free-answer" placeholder="Uveď možné vysvětlení"></textarea><div class="feedback" aria-live="polite"></div></section>
+
+			<h2 class="section-title">Úkol 4: Význam politologie</h2>
+			<section class="question" data-kind="open"><span class="number">11</span><h2>Co podle tebe znamená být „odpovědným občanem“? Vyber si z diagramu jednu oblast a vysvětli, proč je důležitá.</h2><img class="citizen-diagram" src="Obrázek1-transparent.png" alt="Diagram odpovědného občana se čtyřmi oblastmi: politická angažovanost, vytvoření si vlastního názoru, zájem o veřejné dění a politické pojmy"><textarea class="answer free-answer" placeholder="Napiš svou odpověď"></textarea><div class="feedback" aria-live="polite"></div></section>
+			<section class="question" data-kind="open"><span class="number">12</span><h2>Která ze čtyř oblastí je podle tvého osobního názoru pro život nejdůležitější a proč?</h2><div class="rank-board" id="rankList"><div class="rank-row" data-value="angažovanost"><div class="rank-order">1</div><div class="rank-card" style="background:#302d49;border-color:#5c5492;"><span class="rank-label">Politická angažovanost</span></div></div><div class="rank-row" data-value="nazor"><div class="rank-order">2</div><div class="rank-card" style="background:#303d4c;border-color:#4e7895;"><span class="rank-label">Vytvoření si vlastního názoru</span></div></div><div class="rank-row" data-value="verejne-deni"><div class="rank-order">3</div><div class="rank-card" style="background:#422e4b;border-color:#86508e;"><span class="rank-label">Zájem o veřejné dění</span></div></div><div class="rank-row" data-value="pojmy"><div class="rank-order">4</div><div class="rank-card" style="background:#254443;border-color:#3f8b83;"><span class="rank-label">Politické pojmy</span></div></div><input type="hidden" class="answer rank-answer" aria-label="Pořadí oblastí"></div><textarea class="answer free-answer" placeholder="Vysvětli své pořadí"></textarea><div class="feedback" aria-live="polite"></div></section>
+			<section class="question" data-kind="open"><span class="number">13</span><h2>Když se na tyto čtyři oblasti podíváš kriticky u sebe: Ve které z nich se cítíš nejsilnější a ve které by ses naopak potřeboval/a zlepšit?</h2><textarea class="answer free-answer" placeholder="Popiš svou nejsilnější oblast a oblast ke zlepšení"></textarea><div class="feedback" aria-live="polite"></div></section>
+		</main>
+
+		<div class="actions">
+			<button class="check" type="button" id="checkButton">Odeslat odpovědi</button>
+			<a class="terms-quiz-link" id="termsQuizButton" href="pojmy.html">Vyzkoušet znalost pojmů</a>
+		</div>
+		<footer>Interaktivní pracovní list · Zápis odpovědí probíhá přímo v prohlížeči.</footer>
+	</div>
+
+	<script>
+		const introScreen = document.getElementById('introScreen');
+		const startButton = document.getElementById('startButton');
+		const pageHeader = document.querySelector('header');
+		window.setTimeout(() => {
+			startButton.disabled = false;
+			startButton.classList.add('is-ready');
+		}, 10000);
+		startButton.addEventListener('click', () => {
+			if (introScreen) introScreen.remove();
+			if (pageHeader) pageHeader.remove();
+			antiCheatActive = true;
+		});
+
+		const questions = [...document.querySelectorAll('.question')];
+		const answers = [...document.querySelectorAll('.answer')];
+		const secondaryChart = document.querySelector('.secondary-chart');
+		const meaningHeading = [...document.querySelectorAll('.section-title')].find(heading => heading.textContent.includes('Význam politologie'));
+		document.querySelector('main').append(secondaryChart);
+		document.querySelectorAll('.preference-group h3').forEach(heading => {
+			heading.textContent = `${heading.textContent} — preference podle vzdělání`;
+		});
+		const collapsibleLabels = ['Základní otázky', 'Porovnávání', 'Kritické myšlení', 'Význam politologie'];
+		document.querySelectorAll('.section-title').forEach(heading => {
+			if (!collapsibleLabels.some(label => heading.textContent.includes(label))) return;
+			heading.classList.add('collapsible');
+			heading.setAttribute('role', 'button');
+			heading.setAttribute('tabindex', '0');
+			const initiallyExpanded = false;
+			heading.setAttribute('aria-expanded', String(initiallyExpanded));
+			const controlledElements = [];
+			let next = heading.nextElementSibling;
+			while (next && !next.classList.contains('section-title') && !next.classList.contains('data-card')) {
+				controlledElements.push(next);
+				next = next.nextElementSibling;
+			}
+			const sectionContent = document.createElement('div');
+			sectionContent.className = `section-content${initiallyExpanded ? '' : ' collapsed'}`;
+			heading.after(sectionContent);
+			controlledElements.forEach(element => sectionContent.appendChild(element));
+			const toggle = () => {
+				const expanded = heading.getAttribute('aria-expanded') === 'true';
+				heading.setAttribute('aria-expanded', String(!expanded));
+				sectionContent.classList.toggle('collapsed', expanded);
+			};
+			heading.addEventListener('click', toggle);
+			heading.addEventListener('keydown', event => {
+				if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); toggle(); }
+			});
+		});
+
+		document.addEventListener('contextmenu', event => event.preventDefault());
+		document.addEventListener('copy', event => event.preventDefault());
+		document.addEventListener('cut', event => event.preventDefault());
+		document.addEventListener('keydown', event => {
+			if ((event.ctrlKey || event.metaKey) && ['c', 'x'].includes(event.key.toLowerCase())) {
+				event.preventDefault();
+			}
+		});
+		const rankList = document.getElementById('rankList');
+		const rankAnswer = document.querySelector('.rank-answer');
+		const originalRows = [...rankList.querySelectorAll('.rank-row')];
+		const defaultRankOrder = ['angažovanost', 'nazor', 'verejne-deni', 'pojmy'];
+		originalRows.forEach(row => {
+			const card = row.querySelector('.rank-card');
+			if (card) card.dataset.value = row.dataset.value;
+		});
+		let activeDragCard = null;
+		let activePointerId = null;
+		let infractionCount = 0;
+		let isWindowLeaving = false;
+		let antiCheatActive = false;
+		const antiCheatDialog = document.getElementById('antiCheatDialog');
+		const antiCheatMessage = document.getElementById('antiCheatMessage');
+		const antiCheatDismiss = document.getElementById('antiCheatDismiss');
+
+		function showAntiCheatNotice(message) {
+			if (!antiCheatDialog || !antiCheatMessage) return;
+			antiCheatMessage.textContent = message;
+			if (!antiCheatDialog.open) antiCheatDialog.showModal();
+			antiCheatDismiss?.focus();
+		}
+
+		function hideAntiCheatNotice() {
+			if (antiCheatDialog?.open) antiCheatDialog.close();
+		}
+
+		antiCheatDismiss?.addEventListener('click', hideAntiCheatNotice);
+		antiCheatDialog?.addEventListener('cancel', event => event.preventDefault());
+
+		function restoreDefaultRankOrder() {
+			if (!rankList) return;
+			const rows = [...rankList.querySelectorAll('.rank-row')];
+			const cardsByValue = new Map([...rankList.querySelectorAll('.rank-card')].map(card => [card.dataset.value, card]));
+			defaultRankOrder.forEach((value, index) => {
+				const card = cardsByValue.get(value);
+				if (card && rows[index]) rows[index].appendChild(card);
+			});
+			updateRank();
+		}
+
+		function resetWorksheet({ preserveNotice = false } = {}) {
+			const fields = document.querySelectorAll('.answer, input[type="text"], textarea, select');
+			fields.forEach(field => {
+				if (field.type === 'radio' || field.type === 'checkbox') {
+					field.checked = false;
+					return;
+				}
+				field.value = '';
+			});
+			questions.forEach(question => {
+				question.classList.remove('is-submitted');
+				question.querySelectorAll('input, textarea, select').forEach(field => {
+					field.disabled = false;
+				});
+				question.querySelectorAll('.rank-card').forEach(card => {
+					card.classList.remove('locked');
+					card.draggable = true;
+				});
+				const feedback = question.querySelector('.feedback');
+				if (feedback) {
+					feedback.className = 'feedback';
+					feedback.textContent = '';
+				}
+			});
+			restoreDefaultRankOrder();
+			if (!preserveNotice) hideAntiCheatNotice();
+			infractionCount = 0;
+			const checkButton = document.getElementById('checkButton');
+			if (checkButton) {
+				checkButton.disabled = false;
+				checkButton.textContent = 'Odeslat odpovědi';
+			}
+			document.getElementById('termsQuizButton')?.classList.remove('visible');
+			updateProgress();
+		}
+
+		function handleWindowLeave() {
+			if (!antiCheatActive || antiCheatDialog?.open || isWindowLeaving) return;
+			isWindowLeaving = true;
+			setTimeout(() => {
+				isWindowLeaving = false;
+			}, 250);
+
+			infractionCount += 1;
+			if (infractionCount === 1) {
+				showAntiCheatNotice('Varování: Přepínání oken během plnění pracovního listu je zakázáno! Při příštím pokusu bude tvůj postup smazán.');
+				return;
+			}
+
+			showAntiCheatNotice('Druhé porušení: pracovní list byl resetován. Začni znovu.');
+			resetWorksheet({ preserveNotice: true });
+		}
+
+		function updateRank() {
+			const rows = [...rankList.querySelectorAll('.rank-row')];
+			rankAnswer.value = rows.map(row => row.querySelector('.rank-card')?.dataset.value).filter(Boolean).join('|');
+			rows.forEach((row, index) => {
+				const order = row.querySelector('.rank-order');
+				if (order) order.textContent = String(index + 1);
+			});
+			updateProgress();
+		}
+
+		function moveCardToPointer(card, clientY) {
+			const rows = [...rankList.querySelectorAll('.rank-row')];
+			const sourceIndex = rows.findIndex(row => row.contains(card));
+			let targetIndex = rows.findIndex(candidate => {
+				const box = candidate.getBoundingClientRect();
+				return clientY < box.top + box.height / 2;
+			});
+			if (sourceIndex < 0) return;
+			if (targetIndex < 0) targetIndex = rows.length;
+			if (sourceIndex < targetIndex) targetIndex -= 1;
+			if (targetIndex === sourceIndex) return;
+			const cards = rows.map(row => row.querySelector('.rank-card'));
+			cards.splice(sourceIndex, 1);
+			cards.splice(targetIndex, 0, card);
+			cards.forEach((item, index) => rows[index].appendChild(item));
+		}
+
+		rankList.querySelectorAll('.rank-row').forEach(row => {
+			const card = row.querySelector('.rank-card');
+			card.addEventListener('pointerdown', event => {
+				if (card.classList.contains('locked')) return;
+				if (event.pointerType === 'mouse' && event.button !== 0) return;
+				activeDragCard = card;
+				activePointerId = event.pointerId;
+				card.classList.add('dragging');
+				card.setPointerCapture && card.setPointerCapture(event.pointerId);
+			});
+			card.addEventListener('pointermove', event => {
+				if (!activeDragCard || activePointerId !== event.pointerId) return;
+				event.preventDefault();
+				moveCardToPointer(activeDragCard, event.clientY);
+			});
+			card.addEventListener('pointerup', () => {
+				if (!activeDragCard) return;
+				activeDragCard.classList.remove('dragging');
+				activeDragCard = null;
+				activePointerId = null;
+				updateRank();
+			});
+			card.addEventListener('pointercancel', () => {
+				if (!activeDragCard) return;
+				activeDragCard.classList.remove('dragging');
+				activeDragCard = null;
+				activePointerId = null;
+			});
+		});
+
+		document.addEventListener('visibilitychange', () => {
+			if (document.hidden) handleWindowLeave();
+		});
+
+		function getValue(question) {
+			const selected = question.querySelector('input[type="radio"]:checked');
+			if (selected) return selected.value.trim();
+			const fields = [...question.querySelectorAll('input[type="text"], input[type="hidden"], select, textarea')];
+			return fields.map(field => field.value.trim()).find(Boolean) || '';
+		}
+
+		function updateProgress() {
+			const completed = questions.filter(question => getValue(question)).length;
+			return completed;
+		}
+
+		answers.forEach(answer => answer.addEventListener('input', updateProgress));
+		answers.forEach(answer => answer.addEventListener('change', updateProgress));
+
+		document.getElementById('checkButton').addEventListener('click', event => {
+			questions.forEach(question => {
+				question.classList.add('is-submitted');
+				const feedback = question.querySelector('.feedback');
+				const value = getValue(question);
+				question.querySelectorAll('input, textarea, select').forEach(field => { field.disabled = true; });
+				question.querySelectorAll('.rank-card').forEach(card => { card.draggable = false; card.classList.add('locked'); });
+				feedback.className = 'feedback locked-feedback';
+				feedback.textContent = value ? 'Odpověď odeslána.' : 'Bez odpovědi.';
+				const editButton = document.createElement('button');
+				editButton.type = 'button';
+				editButton.className = 'edit-answer';
+				editButton.textContent = 'Upravit odpověď';
+				editButton.addEventListener('click', () => {
+					question.classList.remove('is-submitted');
+					question.querySelectorAll('input, textarea, select').forEach(field => { field.disabled = false; });
+					question.querySelectorAll('.rank-card').forEach(card => { card.draggable = true; card.classList.remove('locked'); });
+					feedback.className = 'feedback';
+					feedback.textContent = 'Odpověď můžeš upravit a znovu odeslat.';
+					const checkButton = document.getElementById('checkButton');
+					checkButton.disabled = false;
+					checkButton.textContent = 'Odeslat upravené odpovědi';
+					document.getElementById('termsQuizButton')?.classList.remove('visible');
+				});
+				feedback.appendChild(editButton);
+			});
+			event.currentTarget.disabled = true;
+			event.currentTarget.textContent = 'Odpovědi odeslány';
+			document.getElementById('termsQuizButton')?.classList.add('visible');
+		});
+
+		updateProgress();
+
+	</script>
+</body>
+</html>
